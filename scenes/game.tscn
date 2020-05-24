@@ -1,0 +1,164 @@
+[gd_scene load_steps=15 format=1]
+
+[ext_resource path="res://scripts/personagem.gd" type="Script" id=1]
+[ext_resource path="res://assets/Personagem/p1_walk01.png" type="Texture" id=2]
+[ext_resource path="res://assets/Personagem/p1_walk02.png" type="Texture" id=3]
+[ext_resource path="res://assets/Personagem/p1_walk03.png" type="Texture" id=4]
+[ext_resource path="res://assets/Personagem/p1_walk04.png" type="Texture" id=5]
+[ext_resource path="res://assets/Personagem/p1_walk05.png" type="Texture" id=6]
+[ext_resource path="res://assets/Personagem/p1_walk06.png" type="Texture" id=7]
+[ext_resource path="res://assets/Personagem/p1_walk07.png" type="Texture" id=8]
+[ext_resource path="res://tilesets/tileset.tres" type="TileSet" id=9]
+[ext_resource path="res://assets/Tiles/cloud1.png" type="Texture" id=10]
+[ext_resource path="res://assets/Tiles/cloud2.png" type="Texture" id=11]
+[ext_resource path="res://scenes/moeda.tscn" type="PackedScene" id=12]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 28.5843, 55.6102 )
+
+[sub_resource type="SpriteFrames" id=2]
+
+animations = [ {
+"frames": [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "default",
+"speed": 10.0
+} ]
+
+[node name="game" type="Node"]
+
+[node name="personagem" type="KinematicBody2D" parent="."]
+
+editor/display_folded = true
+transform/pos = Vector2( 629.982, 382.614 )
+input/pickable = false
+shapes/0/shape = SubResource( 1 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 1, 5 )
+shapes/0/trigger = false
+collision/layers = 1
+collision/mask = 1
+collision/margin = 0.08
+script/script = ExtResource( 1 )
+
+[node name="sprite" type="AnimatedSprite" parent="personagem"]
+
+transform/scale = Vector2( 1.3, 1.3 )
+frames = SubResource( 2 )
+animation = "default"
+playing = true
+
+[node name="shape" type="CollisionShape2D" parent="personagem"]
+
+transform/pos = Vector2( 1, 5 )
+shape = SubResource( 1 )
+trigger = false
+_update_shape_index = 0
+
+[node name="rayE" type="RayCast2D" parent="personagem"]
+
+transform/pos = Vector2( -27.4207, 60.356 )
+enabled = true
+cast_to = Vector2( 0, 5 )
+layer_mask = 1
+type_mask = 15
+
+[node name="rayD" type="RayCast2D" parent="personagem"]
+
+transform/pos = Vector2( 29.3538, 60.2587 )
+enabled = true
+cast_to = Vector2( 0, 5 )
+layer_mask = 1
+type_mask = 15
+
+[node name="camera" type="Camera2D" parent="personagem"]
+
+anchor_mode = 1
+rotating = false
+current = true
+zoom = Vector2( 1, 1 )
+limit/left = 0
+limit/top = -10000000
+limit/right = 10000000
+limit/bottom = 10000000
+drag_margin/h_enabled = true
+drag_margin/v_enabled = true
+smoothing/enable = true
+smoothing/speed = 5.0
+drag_margin/left = 0.1
+drag_margin/top = 0.1
+drag_margin/right = 0.1
+drag_margin/bottom = 0.2
+
+[node name="tileMap" type="TileMap" parent="."]
+
+mode = 0
+tile_set = ExtResource( 9 )
+cell/size = Vector2( 70, 70 )
+cell/quadrant_size = 16
+cell/custom_transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+cell/half_offset = 2
+cell/tile_origin = 0
+cell/y_sort = false
+collision/use_kinematic = false
+collision/friction = 1.0
+collision/bounce = 0.0
+collision/layers = 1
+collision/mask = 1
+occluder/light_mask = 1
+tile_data = IntArray( 131077, 1, 131078, 0, 131079, 4, 131080, 4, 131081, 0, 131082, 2, 262143, 3, 196615, 5, 196616, 5, 327679, 3, 262151, 5, 262152, 5, 393215, 3, 327687, 5, 327688, 5, 327694, 1, 327695, 2, 458751, 3, 393223, 5, 393224, 5, 524287, 3, 458759, 5, 458760, 5, 589823, 3, 524288, 0, 524289, 0, 524290, 0, 524291, 0, 524292, 0, 524293, 0, 524294, 0, 524295, 0, 524296, 0, 524297, 0, 524298, 0, 524299, 0, 524300, 0, 524301, 0, 524302, 0, 524303, 0, 524304, 0, 524305, 4, 524306, 4, 589824, 3, 589825, 3, 589826, 3, 589827, 3, 589828, 3, 589829, 3, 589830, 3, 589831, 3, 589832, 3, 589833, 3, 589834, 3, 589835, 3, 589836, 3, 589837, 3, 589838, 3, 589839, 3, 589840, 3, 589841, 5, 589842, 5, 589843, 3, 655360, 3, 655361, 3, 655362, 3, 655363, 3, 655364, 3, 655365, 3, 655366, 3, 655367, 3, 655368, 3, 655369, 3, 655370, 3, 655371, 3, 655372, 3, 655373, 3, 655374, 3, 655375, 3, 655376, 3, 655377, 5, 655378, 5, 655379, 3, 720896, 3, 720897, 3, 720898, 3, 720899, 3, 720900, 3, 720901, 3, 720902, 3, 720903, 3, 720904, 3, 720905, 3, 720906, 3, 720907, 3, 720908, 3, 720909, 3, 720910, 3, 720911, 3, 720912, 3, 720913, 5, 720914, 5 )
+
+[node name="parallax" type="ParallaxBackground" parent="."]
+
+editor/display_folded = true
+layer = -1
+offset = Vector2( 0, 0 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+scroll/offset = Vector2( 0, 0 )
+scroll/base_offset = Vector2( 0, 0 )
+scroll/base_scale = Vector2( 1, 1 )
+scroll/limit_begin = Vector2( 0, 0 )
+scroll/limit_end = Vector2( 0, 0 )
+scroll/ignore_camera_zoom = false
+
+[node name="layer" type="ParallaxLayer" parent="parallax"]
+
+motion/scale = Vector2( 0.5, 1 )
+motion/offset = Vector2( 0, 0 )
+motion/mirroring = Vector2( 0, 0 )
+
+[node name="Sprite" type="Sprite" parent="parallax/layer"]
+
+transform/pos = Vector2( 190.216, 131.271 )
+transform/scale = Vector2( 1.36969, 1.15512 )
+texture = ExtResource( 10 )
+
+[node name="Sprite1" type="Sprite" parent="parallax/layer"]
+
+transform/pos = Vector2( 948.044, 103.668 )
+transform/scale = Vector2( 1.18174, 0.842339 )
+texture = ExtResource( 10 )
+
+[node name="Sprite2" type="Sprite" parent="parallax/layer"]
+
+transform/pos = Vector2( 1022.07, 146.233 )
+transform/scale = Vector2( 1.18174, 0.842339 )
+texture = ExtResource( 11 )
+
+[node name="moedas" type="Node2D" parent="."]
+
+[node name="moeda" parent="moedas" instance=ExtResource( 12 )]
+
+transform/pos = Vector2( 755.153, 507.506 )
+
+[node name="moeda1" parent="moedas" instance=ExtResource( 12 )]
+
+transform/pos = Vector2( 828.641, 507.506 )
+
+[node name="moeda2" parent="moedas" instance=ExtResource( 12 )]
+
+transform/pos = Vector2( 910.48, 507.506 )
+
+
