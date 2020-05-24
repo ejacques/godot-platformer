@@ -32,14 +32,24 @@ var jumping = false
 
 var prev_jump_pressed = false
 
+var vivo = true
+var fim = false
+
+signal morreu
+signal fim
+
+var left
+var right
+var up
+
 
 func _fixed_process(delta):
 	# Create forces
 	var force = Vector2(0, GRAVITY)
 	
-	var walk_left = Input.is_action_pressed("move_left")
-	var walk_right = Input.is_action_pressed("move_right")
-	var jump = Input.is_action_pressed("jump")
+	var walk_left = (Input.is_action_pressed("move_left") or left) and vivo
+	var walk_right = (Input.is_action_pressed("move_right") or right or fim) and vivo
+	var jump = (Input.is_action_pressed("jump") or up) and vivo
 	
 	var stop = true
 	
@@ -116,8 +126,7 @@ func _fixed_process(delta):
 	if (on_air_time < JUMP_MAX_AIRBORNE_TIME and jump and not prev_jump_pressed and not jumping):
 		# Jump must also be allowed to happen if the character left the floor a little bit ago.
 		# Makes controls more snappy.
-		velocity.y = -JUMP_SPEED
-		jumping = true
+		pular()
 	
 	on_air_time += delta
 	prev_jump_pressed = jump
@@ -137,10 +146,66 @@ func _fixed_process(delta):
 	else:
 		sprite.stop()
 		sprite.set_frame(1)
+		
+	if get_pos().y > 900:
+		morrer()
 
 func _ready():
 	set_fixed_process(true)
 
+func _on_pes_body_enter(body):
+	if not vivo: return
+	pular()
+	body.esmagar()
+
+func pular():
+	velocity.y = -JUMP_SPEED
+	jumping = true
+
+func _on_corpo_body_enter( body ):
+	if not vivo: return
+	morrer()
+
+func morrer():
+	if not vivo: return
+	vivo = false
+	velocity.y = -500
+	get_node("shape").set_trigger(true)
+	emit_signal("morreu")
+	
+
+func _on_cabeca_body_enter( body ):
+	if not vivo: return
+	if body.has_method("destruir"):
+		body.destruir()
+
+func reviver():
+	velocity = Vector2(0, 0)
+	get_node("shape").set_trigger(false)
+	get_node("camera").make_current()
+	vivo = true
+	fim = false
+
+func _on_touchLeft_pressed():
+	left = true
+
+func _on_touchLeft_released():
+	left = false
+
+func _on_touchRight_pressed():
+	right = true
+	
+func _on_touchRight_released():
+	right = false
+
+func _on_touchUp_pressed():
+	up = true
+
+func _on_touchUp_released():
+	up = false
 
 
-
+func _on_fim_body_enter( body ):
+	print("fim")
+	fim = true
+	emit_signal("fim")
